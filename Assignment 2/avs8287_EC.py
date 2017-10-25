@@ -21,20 +21,20 @@ def processRPN(stack, token):			        # FUNCTION: Evaluates #'s & performs ope
   if(token.isdigit() == True):         		# When you find a # add it to stack
     stack.push(token)                 
   if(token == '+'):                     	# Perform operation on last 2 #'s on stack & pop
-    numb1 = int(stack.pop())                 
-    numb2 = int(stack.pop())           		# Push result onto stack (same process for all ops.)
+    numb1 = float(stack.pop())                 
+    numb2 = float(stack.pop())           		# Push result onto stack (same process for all ops.)
     stack.push(numb2 + numb1)				
   if(token == '-'):
-    numb1 = int(stack.pop())           
-    numb2 = int(stack.pop())
+    numb1 = float(stack.pop())           
+    numb2 = float(stack.pop())
     stack.push(numb2 - numb1)				      # NOTE: When - you perform #2-#1
   if(token == '*'):							
-    numb1 = int(stack.pop())                     
-    numb2 = int(stack.pop())
+    numb1 = float(stack.pop())                     
+    numb2 = float(stack.pop())
     stack.push(numb2 * numb1)				      # NOTE: When / you perform #2/#1
   if(token == '/'):
-    numb1 = int(stack.pop())                     
-    numb2 = int(stack.pop())
+    numb1 = float(stack.pop())                     
+    numb2 = float(stack.pop())
     stack.push(numb2 / numb1)
 
 # path.join()-combines getcwd() & file name, getcwd()-confirms path is current working dir
@@ -46,7 +46,7 @@ for line in data:                          	# Loop through the parsed line
   stack = Stack()
   for token in elements:                  	# Loop through the parsed tokens
     processRPN(stack, token)			         	# Call function to process token & stack
-  result = stack.pop()
+  result = int(stack.pop())
   print result
 
 ############################################### BONUS ##############################################
@@ -99,10 +99,10 @@ for line in data:
     top = stack.pop()
     processStack(rpn, stack, top)
   stack = Stack()
-  for value in rpn:                      # Print the rpn exp. per instructions
+  for value in rpn:                      # Print the rpn exp.
     print value,
     processRPN(stack, value)			       # Call function to process rpn token & stack
   print ""
-  result = stack.pop()
+  result = int(stack.pop())
   print result
 
