@@ -2,9 +2,9 @@
 # 10/18/2017
 # 1001138287
 # Code compiled and executed in Mac terminal using python ./avs8287_EC.py
-# RPN Calculator using Python
+# Assignment 2: RPN Calculator using Python
 
-import OS                                   # Per TA we are to use this method to handle files
+import os                                   # Per TA we are to use this method to handle files
 
 class Stack:                                # CLASS: defines functions for stack operations
   def __init__(stack):                      # Constructor
@@ -17,7 +17,7 @@ class Stack:                                # CLASS: defines functions for stack
     return  stack.items.pop()
 
 ############################################ Assignment 2 ##########################################
-def processRPN(stack, token):			    # FUNCTION: Evaluates #'s & performs operations
+def processRPN(stack, token):			        # FUNCTION: Evaluates #'s & performs operations
   if(token.isdigit() == True):         		# When you find a # add it to stack
     stack.push(token)                 
   if(token == '+'):                     	# Perform operation on last 2 #'s on stack & pop
@@ -27,81 +27,81 @@ def processRPN(stack, token):			    # FUNCTION: Evaluates #'s & performs operati
   if(token == '-'):
     numb1 = int(stack.pop())           
     numb2 = int(stack.pop())
-    stack.push(numb2 - numb1)				# NOTE: When - you must perform #2-#1
+    stack.push(numb2 - numb1)				      # NOTE: When - you perform #2-#1
   if(token == '*'):							
     numb1 = int(stack.pop())                     
     numb2 = int(stack.pop())
-    stack.push(numb2 * numb1)				# NOTE: When / you must perform #2/#1
+    stack.push(numb2 * numb1)				      # NOTE: When / you perform #2/#1
   if(token == '/'):
     numb1 = int(stack.pop())                     
     numb2 = int(stack.pop())
     stack.push(numb2 / numb1)
-  
-with open('input_RPN.txt', 'r') as file:    # Open file and save data
+
+# path.join()-combines getcwd() & file name, getcwd()-confirms path is current working dir
+with open(os.path.join(os.getcwd(), "input_RPN.txt"), 'r') as file:   
   content = file.read()
 data = content.split('\n')                 	# Parse data into lines at every new line char
 for line in data:                          	# Loop through the parsed line
-  elements = line.split(' ')             	# Parse the line into tokens at every space char
+  elements = line.split(' ')              	# Parse the line into tokens at every space char
   stack = Stack()
-  for token in elements:                 	# Loop through the parsed tokens
-    processRPN(stack, token)				# Call function to process token & stack
+  for token in elements:                  	# Loop through the parsed tokens
+    processRPN(stack, token)			         	# Call function to process token & stack
   result = stack.pop()
   print result
-print '\nExtra Credit\n'
 
 ############################################### BONUS ##############################################
-def processOperator(rpn, stack, token):             # Add ops to stack according to precedence
-  if((stack.stackLen() - 1) < 0):                   # When stack is empty add token
+def processOperator(rpn, stack, token):             
+  if((stack.stackLen() - 1) < 0):                   # Add first op of exp. to stack
     stack.push(token)
     return
   else:
-    top = stack.items[stack.stackLen() - 1]         # The item at the top of the stack
-    if(top == '('):                                 # When ( is @ top of stack add token
+    top = stack.items[stack.stackLen() - 1]         
+    if(top == '('):                                 # All ops have higher precedence than (
       stack.push(token)
       return
-    if((token == '*' or token == '/') and (top == '+' or top == '-')): # When * or / come after + or -
-      stack.push(token)
+    if((token == '*' or token == '/') and (top == '+' or top == '-')): 
+      stack.push(token)                  # * & / have higher precedence 
       return
-    else:                                # Else pop & app top to rpn exp & loop until able to 
-      rpn.append(top)                    # push token to stack
+    else:                                
+      rpn.append(top)                    # Pop the top op & app it to rpn result
       pop = stack.pop()
-      processOperator(rpn, stack, token)
+      processOperator(rpn, stack, token) # Recurse until stack is empty or op is pushed
 
-def processStack(rpn, stack, top):       # Pop & app top of stack until ( or end of stack  
+def processStack(rpn, stack, top):       
   if(top == '('):                        # Found ( return
     return
   if(stack.stackLen() == 0):             # Last token of stack, pop and app to rpn exp.
     rpn.append(top)
     return
-  else:                                  # Else keep popping & appending until conditions met
+  else:                                  # Recurse until top of stack = ( or stack empty
     rpn.append(top)
     top = stack.pop()
     processStack(rpn, stack, top)
 
-with open('input_RPN_EC.txt', 'r') as file:   # Open file and save data
+with open(os.path.join(os.getcwd(), "input_RPN_EC.txt"), 'r') as file:    # Open file and save data
   content = file.read()
 data = content.split('\n')               # Parse data into lines at every new line char
-for line in data:                        # Loop through the parsed line
+for line in data:                        
   elements = line.split(' ')             # Parse the line into tokens at every space char
   rpn = []
   stack = Stack()
-  for token in elements:                 # Loop through the parsed tokens
-    if(token.isdigit() == True):         # When you find a # add it to rpn exp.
+  for token in elements:                 
+    if(token.isdigit() == True):         # Add # to rpn exp.
       rpn.append(token)
-    if(token == '('):                    # When you find a ( add it to the stack
+    if(token == '('):                    # Add ( to the stack
       stack.push(token)
-    if(token == ')'):                    # When you find a ) call function to process
+    if(token == ')'):                    
       top = stack.pop()
-      processStack(rpn, stack, top)
-    if(token == '+' or token == '-' or token == "*" or token == '/'):   # Call function to process
-      processOperator(rpn, stack, token)
-  if(stack.stackLen > 0):                # When no more tokens add remaining stack to rpn exp.
+      processStack(rpn, stack, top)      # Call function to pop stack till ( on top
+    if(token == '+' or token == '-' or token == "*" or token == '/'):   
+      processOperator(rpn, stack, token) 
+  if(stack.stackLen > 0):                # At end of line add remaining stack to rpn exp.
     top = stack.pop()
     processStack(rpn, stack, top)
   stack = Stack()
   for value in rpn:                      # Print the rpn exp. per instructions
     print value,
-    processRPN(stack, value)			 # Call function to process rpn token & stack
+    processRPN(stack, value)			       # Call function to process rpn token & stack
   print ""
   result = stack.pop()
   print result
