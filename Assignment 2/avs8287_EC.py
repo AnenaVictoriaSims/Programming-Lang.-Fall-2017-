@@ -2,6 +2,7 @@
 # 10/18/2017
 # 1001138287
 # Code compiled and executed in Mac terminal using python ./avs8287_EC.py
+# RPN Calculator using Python
 
 class Stack:                                # CLASS: defines functions for stack operations
   def __init__(stack):                      # Constructor
