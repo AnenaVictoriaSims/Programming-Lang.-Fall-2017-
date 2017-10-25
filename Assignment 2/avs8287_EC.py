@@ -1,5 +1,5 @@
 # Anena Sims
-# 10/18/2017
+# Submitted: 10/25/2017
 # 1001138287
 # Code compiled and executed in Mac terminal using python ./avs8287_EC.py
 # Assignment 2: RPN Calculator using Python
@@ -39,13 +39,13 @@ def processRPN(stack, token):			        # FUNCTION: Evaluates #'s & performs ope
 
 # path.join()-combines getcwd() & file name, getcwd()-confirms path is current working dir
 with open(os.path.join(os.getcwd(), "input_RPN.txt"), 'r') as file:   
-  content = file.read()
+  content = file.read()                     # Read and save RPN exp.
 data = content.split('\n')                 	# Parse data into lines at every new line char
 for line in data:                          	# Loop through the parsed line
   elements = line.split(' ')              	# Parse the line into tokens at every space char
   stack = Stack()
   for token in elements:                  	# Loop through the parsed tokens
-    processRPN(stack, token)			         	# Call function to process token & stack
+    processRPN(stack, token)			         	# Function processes RPN token 
   result = int(stack.pop())
   print result
 
@@ -101,8 +101,8 @@ for line in data:
   stack = Stack()
   for value in rpn:                      # Print the rpn exp.
     print value,
-    processRPN(stack, value)			       # Call function to process rpn token & stack
+    processRPN(stack, value)			       # Process RPN exp. token 
   print ""
   result = int(stack.pop())
-  print result
+  print result                           # Print RPN result 
 
