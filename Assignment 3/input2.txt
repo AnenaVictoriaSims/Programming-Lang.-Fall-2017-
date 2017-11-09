@@ -1,0 +1,4 @@
+import blah;class Foo{   void Foo(){     System.out.println("braces are fun! {{{{{"); // ignored     if (condition){       // also ignored: {        int a = 1;       // as is this: }
+     }
+     else{
+       int x = 1/2;     }   }} //end of program
